@@ -1,0 +1,9 @@
+<!-- main/main.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Main Page{% endblock %}
+
+{% block content %}
+		<a href="{% url 'blog:post_list' %}">블로그</a>
+{% endblock %}
