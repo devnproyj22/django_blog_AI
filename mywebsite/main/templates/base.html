@@ -14,19 +14,32 @@
 <body>
     <header>
         <nav>
-            <!-- 로고 -->
+		        <h1>My Website</h1>
+            <!-- 로고 추가 -->
             <a href="{% url 'main:home' %}">
                 <img src="{% static 'images/logo.png' %}" alt="Site Logo">
             </a>
             {% if user.is_authenticated %}
-		            <a href="{% url 'account:logout' %}">로그아웃</a>
+		            <a href="{% url 'account:logout' %}">로그아웃</a> |
+		            <a href="{% url 'account:password_change' %}">비밀번호 변경</a> |
+		            <a href="{% url 'account:account_delete' %}">계정 삭제</a>
             {% else %}
-		            <a href="{% url 'account:signup' %}">회원가입</a> |
-		            <a href="{% url 'account:login' %}">로그인</a>
+		            <a href="{% url 'account:signup' %}?next={{ request.get_full_path }}">회원가입</a> |
+		            <a href="{% url 'account:login' %}?next={{ request.get_full_path }}">로그인</a>
             {% endif %}
-            </form>
         </nav>
     </header>
+    
+    <!-- 메시지 표시 -->
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <main>
         {% block content %}
@@ -40,7 +53,7 @@
 	    <div>
 	        <p>Contact me:
 	            <a href="mailto:myemail@example.com">Email</a> |
-	            <a href="https://github.com/myusername" target="_blank">GitHub</a>
+	            <a href="https://github.com/yourusername" target="_blank">GitHub</a>
 	        </p>
 	    </div>
     </footer>
