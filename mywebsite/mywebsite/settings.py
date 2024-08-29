@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'main',
     'account',
     'blog',
+    'common',
 ]
 
 MIDDLEWARE = [
@@ -114,7 +115,8 @@ STATIC_ROOT = BASE_DIR / 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'main'/ 'static/',
     BASE_DIR / 'account'/ 'static/',
-    BASE_DIR / 'blog'/ 'static/',    
+    BASE_DIR / 'blog'/ 'static/',
+    BASE_DIR / 'common'/ 'static/',
 ]
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
