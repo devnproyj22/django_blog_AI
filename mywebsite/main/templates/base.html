@@ -15,7 +15,7 @@
     <header>
         <nav>
             <!-- 로고 -->
-            <a href="{% url 'main' %}">
+            <a href="{% url 'main:home' %}">
                 <img src="{% static 'images/logo.png' %}" alt="Site Logo">
             </a>
             {% if user.is_authenticated %}
