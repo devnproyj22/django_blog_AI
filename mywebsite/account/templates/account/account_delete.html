@@ -1,0 +1,13 @@
+<!-- templates/account/account_delete.html -->
+{% extends 'main/base.html' %}
+
+{% block title %}회원계정 삭제{% endblock %}
+
+{% block content %}
+    <h2>회원계정 삭제</h2>
+    <p>정말로 계정을 삭제하시겠습니까?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">삭제</button>
+    </form>
+{% endblock %}

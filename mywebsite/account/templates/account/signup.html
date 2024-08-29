@@ -1,0 +1,16 @@
+<!-- templates/account/signup.html -->
+{% extends 'main/base.html' %}
+
+{% block title %}회원가입{% endblock %}
+
+{% block content %}
+    <h2>회원가입</h2>
+    <form method="post" action="{% url 'account:signup' %}">
+        {% csrf_token %}
+        {{ form.as_p }} 
+        
+        <button type="submit">가입</button>
+    </form>
+
+    <p>계정이 있으신가요? <a href="{% url 'account:login' %}">로그인</a></p>
+{% endblock %}
