@@ -14,7 +14,7 @@ NICKNAME_INAPPROPRIATE_WORDS = [
 PASSWORD_INAPPROPRIATE_WORDS = [
     'password', '123456', 'qwerty', 'letmein', 'admin', 'welcome',
 ]
-INTEREST_INAPPROPRIATE_WORDS = [
+INTEREST_INAPPROPRIATE_WORDS = [ 
     '음란물', '도박', '마약', '불법', '테러', '자살', '폭력',
     'pornography', 'gambling', 'drugs', 'illegal', 'terrorism', 'suicide', 'violence',
 ]
