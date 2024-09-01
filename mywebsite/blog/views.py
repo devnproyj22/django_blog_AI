@@ -17,7 +17,7 @@ def custom_404(request, exception):
 
 class PostListView(ListView):
     model = Post
-    template_name = 'post_list.html'
+    template_name = 'blog/post_list.html'
     context_object_name = 'post_list'
     paginate_by = 10
 
@@ -32,7 +32,7 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
     model = Post
-    template_name = 'post_detail.html'
+    template_name = 'blog/post_detail.html'
     context_object_name = 'post'
     pk_url_kwarg = 'post_id'
     
@@ -48,7 +48,7 @@ class PostDetailView(DetailView):
 class PostCreateView(CreateView):
     model = Post
     form_class = PostForm 
-    template_name = 'post_form.html' 
+    template_name = 'blog/post_form.html' 
     
     def form_valid(self, form):
         form.instance.post_user = self.request.user if self.request.user.is_authenticated else None
@@ -60,7 +60,7 @@ class PostCreateView(CreateView):
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostForm
-    template_name = 'post_form.html'
+    template_name = 'blog/post_form.html'
     pk_url_kwarg = 'post_id'
     
     def test_func(self):
@@ -72,7 +72,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
-    template_name = 'post_confirm_delete.html'
+    template_name = 'blog/post_confirm_delete.html'
     success_url = reverse_lazy('blog:post_list')
     pk_url_kwarg = 'post_id'
 
@@ -83,7 +83,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class PostCommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
-    template_name = 'comment_form.html'
+    template_name = 'blog/comment_form.html'
 
     def form_valid(self, form):
         form.instance.comment_post_id = self.kwargs['post_id']
@@ -98,7 +98,7 @@ class PostCommentCreateView(LoginRequiredMixin, CreateView):
 class PostCommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
     form_class = CommentForm
-    template_name = 'comment_form.html'
+    template_name = 'blog/comment_form.html'
     
     def test_func(self):
         comment = self.get_object()
@@ -112,7 +112,7 @@ class PostCommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
 
 class PostCommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Comment
-    template_name = 'comment_confirm_delete.html'
+    template_name = 'blog/comment_confirm_delete.html'
     
     def test_func(self):
         comment = self.get_object()
@@ -126,7 +126,7 @@ class PostCommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView)
 
 class CategoryPostListView(ListView):
     model = Post
-    template_name = 'post_list.html'
+    template_name = 'blog/post_list.html'
     context_object_name = 'posts'
     paginate_by = 10
 
@@ -140,7 +140,7 @@ class CategoryPostListView(ListView):
 
 class TagPostListView(ListView):
     model = Post
-    template_name = 'post_list.html'
+    template_name = 'blog/post_list.html'
     context_object_name = 'posts'
     paginate_by = 10
 

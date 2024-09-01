@@ -4,6 +4,13 @@
 <main class="post-list-container">
     <h1>게시글 목록</h1>
     
+    <div class="create-post">
+        <a href="{% url 'blog:post_create' %}" class="btn btn-primary">새 게시글 작성</a>
+        {% if not user.is_authenticated %}
+            <p class="anonymous-notice">로그인하지 않은 상태로 게시글을 작성하면 익명으로 등록됩니다.</p>
+        {% endif %}
+    </div>
+    
     <div class="filters">
         <section class="categories">
             <h2>카테고리</h2>
@@ -17,7 +24,6 @@
                 {% endfor %}
             </ul>
         </section>
-
         <section class="tag-filter">
             <h2>태그</h2>
             <ul>
@@ -29,7 +35,6 @@
             </ul>
         </section>
     </div>
-
     <section class="posts">
         <h2>게시글</h2>
         <ul>
@@ -50,7 +55,6 @@
             {% endfor %}
         </ul>
     </section>
-
     {% if is_paginated %}
         <nav class="pagination" aria-label="페이지 네비게이션">
             <ul>
