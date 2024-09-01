@@ -136,8 +136,8 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
 
 # Redirect URL of Login and Logout
-LOGIN_REDIRECT_URL = '/main/'
-LOGOUT_REDIRECT_URL = '/main/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 from .inappropriate_words import *
 

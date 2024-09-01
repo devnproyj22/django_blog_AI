@@ -41,6 +41,8 @@ class CustomLoginView(LoginView):
         return reverse_lazy('main:home') 
     
 class CustomLogoutView(LoginRequiredMixin, LogoutView):
+    http_method_names = ['post', 'get'] 
+    
     def get_next_page(self):
         '''로그아웃 후 리다이렉트할 URL을 결정'''
         next_page = self.request.GET.get('next')
