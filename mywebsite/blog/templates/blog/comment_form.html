@@ -1,0 +1,26 @@
+{% load static %}
+
+<form method="post" class="comment-form">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text }}</small>
+            {% endif %}
+            {% if field.errors %}
+                <div class="error-message">
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">댓글 {% if form.instance.pk %}수정{% else %}작성{% endif %}</button>
+</form>
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'blog/css/comment_form.css' %}">
+{% endblock %}

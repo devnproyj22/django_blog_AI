@@ -1,0 +1,70 @@
+{% extends "main/base.html" %}
+{% block title %}게시글 목록{% endblock %}
+{% block content %}
+<main class="post-list-container">
+    <h1>게시글 목록</h1>
+    
+    <div class="filters">
+        <section class="categories">
+            <h2>카테고리</h2>
+            <ul>
+                {% for category in categories %}
+                    <li>
+                        <a href="{% url 'blog:category_posts' category.slug %}">{{ category.name }}</a>
+                    </li>
+                {% empty %}
+                    <li>카테고리가 없습니다.</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section class="tag-filter">
+            <h2>태그</h2>
+            <ul>
+                {% for tag in tags %}
+                    <li><a href="{% url 'blog:tag_posts' tag.slug %}">{{ tag.name }}</a></li>
+                {% empty %}
+                    <li>태그가 없습니다.</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+
+    <section class="posts">
+        <h2>게시글</h2>
+        <ul>
+            {% for post in post_list %}
+                <li>
+                    <article>
+                        <h3>
+                            <a href="{% url 'blog:post_detail' post.post_id %}">
+                                {{ post.post_title }}
+                            </a>
+                        </h3>
+                        <p>운동 종목: {{ post.post_sport_type }} (목표: {{ post.post_sport_milestone }})</p>
+                        <p class="author">작성자: {{ post.post_user.username|default:"익명" }}</p>
+                    </article>
+                </li>
+            {% empty %}
+                <li>게시글이 없습니다.</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    {% if is_paginated %}
+        <nav class="pagination" aria-label="페이지 네비게이션">
+            <ul>
+                {% if page_obj.has_previous %}
+                    <li><a href="?page=1" aria-label="첫 페이지">&laquo; 처음</a></li>
+                    <li><a href="?page={{ page_obj.previous_page_number }}" aria-label="이전 페이지">이전</a></li>
+                {% endif %}
+                <li><span class="current">페이지 {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+                {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}" aria-label="다음 페이지">다음</a></li>
+                    <li><a href="?page={{ page_obj.paginator.num_pages }}" aria-label="마지막 페이지">마지막 &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</main>
+{% endblock %}

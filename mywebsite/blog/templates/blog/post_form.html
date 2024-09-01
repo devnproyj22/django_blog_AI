@@ -1,0 +1,41 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}게시글 수정{% else %}새 게시글 작성{% endif %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'blog/css/post_form.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="post-form-container">
+    <h1>{% if form.instance.pk %}게시글 수정{% else %}새 게시글 작성{% endif %}</h1>
+    <form method="post" enctype="multipart/form-data" class="post-form">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+                {% if field.errors %}
+                    <div class="error-message">
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                {% if form.instance.pk %}수정 완료{% else %}게시글 작성{% endif %}
+            </button>
+            <a href="{% url 'blog:post_list' %}" class="btn btn-secondary">취소</a>
+        </div>
+    </form>
+</main>
+{% endblock %}

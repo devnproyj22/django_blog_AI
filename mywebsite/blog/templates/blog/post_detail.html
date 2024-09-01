@@ -1,0 +1,106 @@
+{% extends "main/base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+<main class="post-detail">
+    <article>
+        <h1>{{ post.title }}</h1>
+        
+        {% if post.exercise_video %}
+            <div class="video-container">
+                <video src="{{ post.exercise_video.url }}" controls>
+                    <p>Your browser does not support the video tag.</p>
+                </video>
+            </div>
+        {% endif %}
+        
+        <section class="post-details">
+            <h2>운동 정보</h2>
+            <dl>
+                <dt>운동 종목</dt>
+                <dd>{{ post.post_sport_type }}</dd>
+                <dt>운동 일시</dt>
+                <dd>{{ post.post_session.exercise_at|date:"Y년 m월 d일 H:i" }}</dd>
+                <dt>운동 중간 목표</dt>
+                <dd>{{ post.post_sport_milestone }}</dd>
+                <dt>운동 장소</dt>
+                <dd>{{ post.post_session.exercise_loc }}</dd>
+                <dt>운동 시간</dt>
+                <dd>{{ post.post_session.exercise_dur }} 분</dd>
+            </dl>
+        </section>
+
+        <section class="post-content">
+            <h2>게시글 내용</h2>
+            {{ post.post_content|linebreaks }}
+        </section>
+
+        <a href="{% url 'blog:post_list' %}" class="back-link">목록으로 돌아가기</a>
+    </article>
+
+<section class="comments-section">
+        <h2>댓글</h2>
+        {% for comment in post.comments.all %}
+            <article class="comment" id="comment-{{ comment.comment_id }}">
+                <header>
+                    <h3>{{ comment.user.username }}</h3>
+                    <time datetime="{{ comment.created_at|date:'Y-m-d H:i' }}">
+                        {{ comment.created_at|date:"Y년 m월 d일 H:i" }}
+                    </time>
+                </header>
+                <div class="comment-content">
+                    {{ comment.content|linebreaks }}
+                </div>
+                {% if comment.user == request.user %}
+                    <footer>
+                        <button class="edit-comment-btn" data-comment-id="{{ comment.comment_id }}">수정</button>
+                        <button class="delete-comment-btn" data-comment-id="{{ comment.comment_id }}">삭제</button>
+                    </footer>
+                    {% include "blog/comment_edit_form.html" with comment=comment %}
+                    {% include "blog/comment_confirm_delete.html" with comment=comment %}
+                {% endif %}
+            </article>
+        {% empty %}
+            <p>아직 댓글이 없습니다. 첫 번째로 댓글을 작성해 보세요!</p>
+        {% endfor %}
+    </section>
+    {% if user.is_authenticated %}
+        <section class="comment-form">
+            <h2>댓글 작성</h2>
+            {% include "blog/comment_form.html" %}
+        </section>
+    {% else %}
+        <p>댓글을 작성하려면 <a href="{% url 'account:login' %}">로그인</a>해주세요.</p>
+    {% endif %}
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('.delete-comment-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const commentId = this.dataset.commentId;
+        document.getElementById(`delete-comment-${commentId}`).style.display = 'block';
+    });
+});
+
+document.querySelectorAll('.edit-comment-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const commentId = this.dataset.commentId;
+        const commentContent = document.querySelector(`#comment-${commentId} .comment-content`);
+        const editForm = document.getElementById(`edit-comment-${commentId}`);
+        commentContent.style.display = 'none';
+        editForm.style.display = 'block';
+    });
+});
+
+document.querySelectorAll('.cancel-edit').forEach(button => {
+    button.addEventListener('click', function() {
+        const commentId = this.dataset.commentId;
+        const commentContent = document.querySelector(`#comment-${commentId} .comment-content`);
+        const editForm = document.getElementById(`edit-comment-${commentId}`);
+        commentContent.style.display = 'block';
+        editForm.style.display = 'none';
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}게시글 삭제 확인{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'blog/css/post_confirm_delete.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="delete-confirm-container">
+    <h1>게시글 삭제 확인</h1>
+    <article class="post-summary">
+        <h2>{{ post.post_title }}</h2>
+        <p><strong>작성자:</strong> {{ post.post_user.username|default:"익명" }}</p>
+        <p><strong>작성일:</strong> {{ post.created_at|date:"Y년 m월 d일 H:i" }}</p>
+        <p><strong>운동 종목:</strong> {{ post.post_sport_type }}</p>
+        <p><strong>운동 목표:</strong> {{ post.post_sport_milestone }}</p>
+    </article>
+    <p class="warning">정말로 이 게시글을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</p>
+    <form method="post" class="delete-form">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-danger" aria-label="게시글 삭제 확인">삭제</button>
+            <a href="{% url 'blog:post_detail' post.post_id %}" class="btn btn-secondary" aria-label="게시글 삭제 취소">취소</a>
+        </div>
+    </form>
+</main>
+{% endblock %}
