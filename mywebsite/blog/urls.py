@@ -29,7 +29,7 @@ comment_crud = [
 ]
 category_tag = [
     path('category/<slug:slug>/', CategoryPostListView.as_view(), name='category_posts'),
-    path('tags/slug:slug>/', TagPostListView.as_view(), name='tag_posts'),
+    path('tags/<slug:slug>/', TagPostListView.as_view(), name='tag_posts'),
 ]
 
 urlpatterns = post_crud + comment_crud + category_tag

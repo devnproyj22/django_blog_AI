@@ -101,12 +101,12 @@ class PostForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['post_comment']  
+        fields = ['comment_content']  
 
-    def clean_post_comment(self):
-        post_comment = self.cleaned_data.get('post_comment')
-        inappropriate_word = check_inappropriate_words(post_comment, settings.INAPPROPRIATE_WORDS['comment'])
+    def clean_comment_content(self):
+        comment_content = self.cleaned_data.get('comment_content')
+        inappropriate_word = check_inappropriate_words(comment_content, settings.INAPPROPRIATE_WORDS['comment'])
         if inappropriate_word:
             raise forms.ValidationError(_('댓글에 부적절한 단어 "%(word)s"가 포함되어 있습니다'), 
                                         params={'word': inappropriate_word})
-        return post_comment
+        return comment_content
