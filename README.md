@@ -166,71 +166,113 @@ gantt
 
 
 ## ERD: 데이터베이스 구조 설계
-
-![django_blog_AI_DB_diagram](https://github.com/user-attachments/assets/d77c474f-de77-42c8-9e69-27f111de3398)
-
-
-### 단계별 구상 
 ```mermaid
-flowchart TD
-    A[시작] --> B[1. 필드 내용 나열]
-    B --> C[2. 정규화와 확장성 고려]
-    C --> D[3. 관계 설정]
-    D --> E[4. 필드 지정]
-    E --> F[5. 필드 옵션 설정]
-    F --> G[6. 도메인 설정]
-    G --> H[7. 앱별 모델 작성]
-    H --> I[8. 데이터 무결성 검토]
-    I --> J[9. 보안 고려사항 검토]
-    J --> K[10. 성능 최적화 검토]
-    K --> L[종료]
+erDiagram
+    BaseModel {
+        int id PK
+        timestamp created_at
+        timestamp updated_at
+    }
 
-    B1[1.1 엔티티 식별]
-    B2[1.2 각 엔티티의 속성 나열]
-    B --> B1 --> B2
+    SportType {
+        int sport_id PK
+        sport_type_enum sport_type
+    }
 
-    C1[2.1 중복 데이터 제거]
-    C2[2.2 슈퍼키, 기본키, 후보키 식별]
-    C3[2.3 정규화 수행 1NF, 2NF, 3NF]
-    C --> C1 --> C2 --> C3
+    SportMilestone {
+        int milestone_id PK
+        sport_milestone_enum sport_milestone
+        int sport_type FK
+    }
 
-    D1[3.1 엔티티 간 관계 파악]
-    D2[3.2 관계 유형 결정 1:1, 1:N, N:M]
-    D3[3.3 참조키 설정]
-    D --> D1 --> D2 --> D3
+    SportSession {
+        int session_id PK
+        varchar exercise_video
+        timestamp exercise_at
+        varchar exercise_loc
+        decimal exercise_dur
+        int user FK
+    }
 
-    E1[4.1 필드 의미 파악]
-    E2[4.2 적절한 영어 표현 선택]
-    E3[4.3 Django 모델 필드 타입 선택]
-    E --> E1 --> E2 --> E3
+    Category {
+        int id PK
+        varchar name
+        varchar slug
+    }
 
-    F1[5.1 필드 길이 제한 설정]
-    F2[5.2 NULL 허용 여부 결정]
-    F3[5.3 기본값 설정]
-    F4[5.4 유니크 제약 설정]
-    F --> F1 --> F2 --> F3 --> F4
+    Tag {
+        int id PK
+        varchar name
+        varchar slug
+    }
 
-    G1[6.1 선택 옵션이 필요한 필드 식별]
-    G2[6.2 TextChoices 클래스 정의]
-    G3[6.3 choices 옵션 설정]
-    G --> G1 --> G2 --> G3
+    Post {
+        int post_id PK
+        varchar post_title
+        text post_content
+        int post_user FK
+        int post_sport_type FK
+        int post_sport_milestone FK
+        int post_session FK
+        int category FK
+    }
 
-    H1[7.1 앱 구조 설계]
-    H2[7.2 각 앱에 해당하는 모델 분류]
-    H3[7.3 models.py 파일에 모델 정의]
-    H --> H1 --> H2 --> H3
+    Post_Tags {
+        int post_id FK
+        int tag_id FK
+    }
 
-    I1[8.1 제약 조건 검토]
-    I2[8.2 트리거 필요성 검토]
-    I --> I1 --> I2
+    Comment {
+        int comment_id PK
+        text comment_content
+        int comment_user FK
+        int comment_post FK
+        int parent_comment FK
+    }
 
-    J1[9.1 접근 권한 설정]
-    J2[9.2 민감 정보 암호화 검토]
-    J --> J1 --> J2
+    MilestoneProgress {
+        int m_progress_id PK
+        int post_count
+        int pg_sport_type FK
+        int pg_sport_milestone FK
+    }
 
-    K1[10.1 인덱스 설정]
-    K2[10.2 쿼리 최적화]
-    K3[10.3 캐싱 전략 수립]
-    K --> K1 --> K2 --> K3
+    CustomUser {
+        int id PK
+        varchar username
+        varchar email
+    }
+
+    %% Relationships
+    BaseModel ||--|| SportType : "Inherits"
+    BaseModel ||--|| SportMilestone : "Inherits"
+    BaseModel ||--|| SportSession : "Inherits"
+    BaseModel ||--|| Category : "Inherits"
+    BaseModel ||--|| Tag : "Inherits"
+    BaseModel ||--|| Post : "Inherits"
+    BaseModel ||--|| Comment : "Inherits"
+    BaseModel ||--|| MilestoneProgress : "Inherits"
+
+    SportType ||--o{ SportMilestone : "Has Many"
+    SportMilestone ||--o| SportType : "Belongs To"
+
+    SportSession ||--o| CustomUser : "Belongs To"
+
+    Post ||--o| CustomUser : "Belongs To"
+    Post ||--o| SportType : "Belongs To"
+    Post ||--o| SportMilestone : "Belongs To"
+    Post ||--o| SportSession : "Belongs To"
+    Post ||--o| Category : "Belongs To"
+    Post ||--o{ Post_Tags : "Has Many"
+
+    Post_Tags ||--o| Tag : "Belongs To"
+    Post_Tags ||--o| Post : "Belongs To"
+
+    Comment ||--o| CustomUser : "Belongs To"
+    Comment ||--o| Post : "Belongs To"
+    Comment ||--o| Comment : "Belongs To"
+
+    MilestoneProgress ||--o| SportType : "Belongs To"
+    MilestoneProgress ||--o| SportMilestone : "Belongs To"
+
 ```
-
