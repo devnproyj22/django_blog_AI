@@ -166,7 +166,7 @@ gantt
 
 
 ## ERD: 데이터베이스 구조 설계
-'''dbml
+```dbml
 // Enum definitions
 Enum sport_type_enum {
   GOLF
@@ -277,8 +277,7 @@ Ref: BaseModel.id - Comment.comment_id
 Ref: BaseModel.id - MilestoneProgress.m_progress_id
 
 Ref: "Tag"."id" < "Tag"."slug"
-
-'''
+```
 
 
 ### 단계별 구상 
