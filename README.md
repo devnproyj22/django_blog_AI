@@ -166,6 +166,9 @@ gantt
 
 
 ## ERD: 데이터베이스 구조 설계
+
+![django_blog_AI_DB_diagram](https://github.com/user-attachments/assets/d77c474f-de77-42c8-9e69-27f111de3398)
+
 ```dbml
 // Enum definitions
 Enum sport_type_enum {
