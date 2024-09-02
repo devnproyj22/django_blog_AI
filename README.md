@@ -165,10 +165,123 @@ gantt
 ## 와이어프레임
 
 
-## ERD: 데이터베이스 구조 설계 
-- dbdiagram : https://dbdiagram.io/d/django_blog_AI_DB_diagram-66cd88f33f611e76e997dae1
+## ERD: 데이터베이스 구조 설계
+'''dbml
+// Enum definitions
+Enum sport_type_enum {
+  GOLF
+  TENNIS
+  PILATES
+  JOGGING
+  HIKING
+  SWIMMING
+}
 
-### 단계별 구상 (캐시까지)
+Enum sport_milestone_enum {
+  RECORD_IMPROVEMENT
+  REPETITIONS_INCREASE
+  DISTANCE_EXTENSION
+  SKILL_IMPROVEMENT
+  CONSISTENCY
+  STAMINA_IMPROVEMENT
+  CALORIE_BURN
+  FLEXIBILITY_IMPROVEMENT
+}
+
+// Base model fields
+Table BaseModel {
+  id int [pk, increment]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table SportType {
+  sport_id int [pk, increment]
+  sport_type sport_type_enum
+}
+
+Table SportMilestone {
+  milestone_id int [pk, increment]
+  sport_milestone sport_milestone_enum
+  sport_type int [ref: > SportType.sport_id]
+}
+
+Table SportSession {
+  session_id int [pk, increment]
+  exercise_video varchar
+  exercise_at timestamp
+  exercise_loc varchar
+  exercise_dur decimal
+  user int [ref: > CustomUser.id]
+}
+
+Table Category {
+  id int [pk, increment]
+  name varchar
+  slug varchar [unique]
+}
+
+Table Tag {
+  id int [pk, increment]
+  name varchar [unique]
+  slug varchar [unique]
+}
+
+Table Post {
+  post_id int [pk, increment]
+  post_title varchar
+  post_content text
+  post_user int [ref: > CustomUser.id]
+  post_sport_type int [ref: > SportType.sport_id]
+  post_sport_milestone int [ref: > SportMilestone.milestone_id]
+  post_session int [ref: - SportSession.session_id]
+  category int [ref: > Category.id]
+}
+
+Table Post_Tags {
+  post_id int [ref: > Post.post_id]
+  tag_id int [ref: > Tag.id]
+}
+
+Table Comment {
+  comment_id int [pk, increment]
+  comment_content text
+  comment_user int [ref: > CustomUser.id]
+  comment_post int [ref: > Post.post_id]
+  parent_comment int [ref: > Comment.comment_id]
+}
+
+Table MilestoneProgress {
+  m_progress_id int [pk, increment]
+  post_count int
+  pg_sport_type int [ref: > SportType.sport_id]
+  pg_sport_milestone int [ref: > SportMilestone.milestone_id]
+}
+
+// Assuming CustomUser is defined elsewhere
+Table CustomUser {
+  id int [pk, increment]
+  username varchar
+  email varchar
+  // Other user fields...
+}
+
+// All tables inherit from BaseModel
+Ref: BaseModel.id - SportType.sport_id
+Ref: BaseModel.id - SportMilestone.milestone_id
+Ref: BaseModel.id - SportSession.session_id
+Ref: BaseModel.id - Category.id
+Ref: BaseModel.id - Tag.id
+Ref: BaseModel.id - Post.post_id
+Ref: BaseModel.id - Comment.comment_id
+Ref: BaseModel.id - MilestoneProgress.m_progress_id
+
+Ref: "Tag"."id" < "Tag"."slug"
+
+'''
+
+
+### 단계별 구상 
 ```mermaid
 flowchart TD
     A[시작] --> B[1. 필드 내용 나열]
